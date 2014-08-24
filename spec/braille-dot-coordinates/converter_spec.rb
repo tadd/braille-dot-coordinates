@@ -30,4 +30,13 @@ describe BrailleDotCoordinates::Converter do
                                                     [2000*2, 2250*3]]
     end
   end
+
+  describe '#convert' do
+    subject { described_class.new }
+
+    it 'converts braille string to coordinates' do
+      expect(subject.convert('⠁⠁')).to eq [[[2000, 2250]],
+                                            [[7200, 2250]]]
+    end
+  end
 end

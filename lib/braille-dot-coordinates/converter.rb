@@ -16,6 +16,7 @@ module BrailleDotCoordinates
       5 => [2000*2, 2250*2],
       6 => [2000*2, 2250*3]
     }
+    JIKAN = 5200
     DEFAULT_OPTION = {
       unit: :um,
       type: :integer
@@ -27,10 +28,13 @@ module BrailleDotCoordinates
       @type = option[:type]
     end
 
-    # FIXME!!!: 2nd or later characters don't have correct coordinates
     def convert(string)
-      string.scan(/./).map do |ch|
-        convert_character(ch)
+      string.scan(/./).map.with_index do |ch, i|
+        coords = convert_character(ch)
+        coords.each do |coord|
+          coord[0] += i * JIKAN
+        end
+        coords
       end
     end
 
@@ -39,7 +43,7 @@ module BrailleDotCoordinates
       raise ConverterError, "non-braille charactor given: '#{ch}'" unless self.class.braille?(ch)
       code = ::BrailleDotCoordinates::Table::CHAR_TO_CODE[ch]
       CODE_TO_COORDINATES_UM.map do |nth, coordinates|
-        (code & (1 << (nth-1))).nonzero? ? coordinates : nil
+        (code & (1 << (nth-1))).nonzero? ? coordinates.dup : nil
       end.compact
     end
 
