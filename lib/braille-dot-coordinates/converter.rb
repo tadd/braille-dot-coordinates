@@ -39,7 +39,7 @@ module BrailleDotCoordinates
     end
 
     def convert_character(ch)
-      return nil if ch == ' '
+      return [] if ch == ' '
       raise ConverterError, "non-braille charactor given: '#{ch}'" unless self.class.braille?(ch)
       code = ::BrailleDotCoordinates::Table::CHAR_TO_CODE[ch]
       CODE_TO_COORDINATES_UM.map do |nth, coordinates|

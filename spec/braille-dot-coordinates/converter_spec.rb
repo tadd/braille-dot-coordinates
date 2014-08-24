@@ -29,6 +29,12 @@ describe BrailleDotCoordinates::Converter do
                                                     [2000*2, 2250*2],
                                                     [2000*2, 2250*3]]
     end
+
+    context 'space given' do
+      it 'converts as empty corrdinates' do
+        expect(subject.convert_character(' ')).to eq []
+      end
+    end
   end
 
   describe '#convert' do
@@ -36,7 +42,13 @@ describe BrailleDotCoordinates::Converter do
 
     it 'converts braille string to coordinates' do
       expect(subject.convert('⠁⠁')).to eq [[[2000, 2250]],
-                                            [[7200, 2250]]]
+                                            [[2000 + 5200, 2250]]]
+    end
+
+    it 'converts string with space' do
+      expect(subject.convert('⠁ ⠁')).to eq [[[2000, 2250]],
+                                             [],
+                                             [[2000 + 5200*2, 2250]]]
     end
   end
 end
